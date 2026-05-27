@@ -1,127 +1,116 @@
 import axios from 'axios';
 import NodeCache from 'node-cache';
 
-// Cache configuration:
-// stdTTL: standard time to live in seconds (e.g., 1 hour = 3600 seconds)
-// checkperiod: how often to check for expired keys
-// maxKeys: prevent memory overflow
-const cache = new NodeCache({ stdTTL: 3600, checkperiod: 600, maxKeys: 2000 });
+const cache = new NodeCache({
+  stdTTL: 60 * 60, // 1 hour
+  checkperiod: 600,
+});
 
-const BASE_URL = 'https://pokeapi.co/api/v2';
-
-const apiClient = axios.create({
-  baseURL: BASE_URL,
+const api = axios.create({
+  baseURL: 'https://pokeapi.co/api/v2',
   timeout: 10000,
 });
 
-/**
- * Fetch a list of all pokemon (for search/autocomplete)
- * Caches indefinitely (or very long) since this rarely changes.
- */
+// get all pokemon names for search
 export const getAllPokemon = async () => {
-  const cacheKey = 'all_pokemon';
-  const cachedData = cache.get(cacheKey);
-  if (cachedData) return cachedData;
+  const cached = cache.get('pokemon_list');
+
+  if (cached) {
+    return cached;
+  }
 
   try {
-    // Fetching a large number to cover all existing pokemon
-    const response = await apiClient.get('/pokemon?limit=10000');
-    const data = response.data.results.map((p, index) => ({
-      name: p.name,
+    const response = await api.get('/pokemon?limit=10000');
+
+    const pokemonList = response.data.results.map((pokemon, index) => ({
       id: index + 1,
-      url: p.url,
+      name: pokemon.name,
+      url: pokemon.url,
     }));
-    
-    // Cache for 24 hours
-    cache.set(cacheKey, data, 86400);
-    return data;
+
+    // storing for 24 hrs since list rarely changes
+    cache.set('pokemon_list', pokemonList, 60 * 60 * 24);
+
+    return pokemonList;
   } catch (error) {
-    console.error('Error fetching all pokemon:', error.message);
+    console.error('Failed to fetch pokemon list', error.message);
     throw error;
   }
 };
 
-/**
- * Fetch detailed information for a specific pokemon
- */
-export const getPokemonDetails = async (identifier) => {
-  const cacheKey = `pokemon_${identifier}`;
-  const cachedData = cache.get(cacheKey);
-  if (cachedData) return cachedData;
+export const getPokemonDetails = async (name) => {
+  const cacheKey = `pokemon_${name}`;
+
+  const cached = cache.get(cacheKey);
+
+  if (cached) {
+    return cached;
+  }
 
   try {
+    const pokemonRequest = api.get(`/pokemon/${name}`);
+
+    // species api sometimes fails for special forms
+    const speciesRequest = api
+      .get(`/pokemon-species/${name}`)
+      .catch(() => null);
+
     const [pokemonRes, speciesRes] = await Promise.all([
-      apiClient.get(`/pokemon/${identifier}`),
-      apiClient.get(`/pokemon-species/${identifier}`).catch(() => null) // Species might fail if identifier is form-specific
+      pokemonRequest,
+      speciesRequest,
     ]);
 
     const pokemon = pokemonRes.data;
-    const species = speciesRes ? speciesRes.data : null;
+    const species = speciesRes?.data;
 
-    // Merge essential data to optimize frontend processing
-    const result = {
+    const data = {
       id: pokemon.id,
       name: pokemon.name,
       height: pokemon.height,
       weight: pokemon.weight,
       base_experience: pokemon.base_experience,
+
       sprites: {
         front_default: pokemon.sprites.front_default,
         other: pokemon.sprites.other,
       },
-      types: pokemon.types.map(t => t.type.name),
-      stats: pokemon.stats.map(s => ({
-        name: s.stat.name,
-        base_stat: s.base_stat,
+
+      types: pokemon.types.map((item) => item.type.name),
+
+      stats: pokemon.stats.map((stat) => ({
+        name: stat.stat.name,
+        base_stat: stat.base_stat,
       })),
-      abilities: pokemon.abilities.map(a => ({
-        name: a.ability.name,
-        is_hidden: a.is_hidden,
+
+      abilities: pokemon.abilities.map((ability) => ({
+        name: ability.ability.name,
+        is_hidden: ability.is_hidden,
       })),
-      moves: pokemon.moves.slice(0, 10).map(m => m.move.name), // Limit moves to first 10 for performance
-      speciesInfo: species ? {
-        color: species.color?.name,
-        habitat: species.habitat?.name,
-        is_legendary: species.is_legendary,
-        is_mythical: species.is_mythical,
-        evolution_chain_url: species.evolution_chain?.url,
-        flavor_text: species.flavor_text_entries.find(f => f.language.name === 'en')?.flavor_text.replace(/\f|\n|\r/g, ' '),
-      } : null,
+
+      // limiting moves because payload gets huge
+      moves: pokemon.moves
+        .slice(0, 10)
+        .map((move) => move.move.name),
+
+      speciesInfo: species
+        ? {
+            color: species.color?.name,
+            habitat: species.habitat?.name,
+            is_legendary: species.is_legendary,
+            is_mythical: species.is_mythical,
+
+            flavor_text: species.flavor_text_entries
+              .find((entry) => entry.language.name === 'en')
+              ?.flavor_text.replace(/\f|\n|\r/g, ' '),
+          }
+        : null,
     };
 
-    cache.set(cacheKey, result);
-    return result;
+    cache.set(cacheKey, data);
+
+    return data;
   } catch (error) {
-    console.error(`Error fetching pokemon ${identifier}:`, error.message);
-    throw error;
-  }
-};
-
-/**
- * Fetch evolution chain by chain ID
- */
-export const getEvolutionChain = async (url) => {
-  const cacheKey = `evolution_${url}`;
-  const cachedData = cache.get(cacheKey);
-  if (cachedData) return cachedData;
-
-  try {
-    const response = await axios.get(url); // url is full absolute path from pokeapi
-    
-    // Normalize evolution tree
-    const processChain = (chainNode) => {
-      if (!chainNode) return null;
-      return {
-        species_name: chainNode.species.name,
-        evolves_to: chainNode.evolves_to.map(processChain),
-      };
-    };
-
-    const result = processChain(response.data.chain);
-    cache.set(cacheKey, result, 86400); // Evolutions don't change often
-    return result;
-  } catch (error) {
-    console.error('Error fetching evolution chain:', error.message);
+    console.error(`Failed to fetch pokemon ${name}`, error.message);
     throw error;
   }
 };

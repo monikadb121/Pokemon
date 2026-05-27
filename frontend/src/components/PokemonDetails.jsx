@@ -3,7 +3,6 @@ import { getPokemon } from '../api';
 import { getTypeColor, formatId } from '../utils/helpers';
 import { motion } from 'framer-motion';
 import Tilt from 'react-parallax-tilt';
-import EvolutionChain from './EvolutionChain';
 
 export default function PokemonDetails({ pokemonName, onSelectPokemon }) {
   const { data, isLoading, error } = useQuery({
@@ -179,10 +178,6 @@ export default function PokemonDetails({ pokemonName, onSelectPokemon }) {
         </div>
       </div>
 
-      {/* Evolution Chain */}
-      {data.speciesInfo?.evolution_chain_url && (
-        <EvolutionChain url={data.speciesInfo.evolution_chain_url} onSelect={onSelectPokemon} />
-      )}
     </motion.div>
   );
 }

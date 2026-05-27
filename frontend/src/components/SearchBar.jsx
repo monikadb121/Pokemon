@@ -29,14 +29,13 @@ export default function SearchBar({ onSelect }) {
 
   return (
     <div className="relative w-full max-w-2xl mx-auto z-50 group">
-      <div className="relative flex items-center w-full h-12 md:h-14 rounded-xl focus-within:shadow-[0_0_20px_rgba(0,240,255,0.3)] bg-surface border border-white/10 focus-within:border-primary/50 overflow-hidden transition-all duration-300">
-        <div className="grid place-items-center h-full w-14 text-text-muted group-focus-within:text-primary transition-colors">
+      <div className="relative flex items-center w-full h-12 md:h-14 rounded-xl focus-within:shadow-[0_0_20px_rgba(0,240,255,0.3)] bg-surface border border-white/10 focus-within:border-primary/50 overflow-hidden transition-all duration-300">  <div className="grid place-items-center h-full w-14 text-text-muted group-focus-within:text-primary transition-colors">
           {isLoading ? <Loader2 className="animate-spin w-5 h-5" /> : <Search className="w-5 h-5" />}
         </div>
         <input
           className="peer h-full w-full outline-none text-sm md:text-base text-text bg-transparent pr-4 font-medium tracking-wide placeholder-text-muted/50"
           type="text"
-          placeholder="QUERY DATABASE... (E.G. CHARIZARD)"
+          placeholder="Search for a Pokémon (e.g. bulbasaur)"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onFocus={() => inputValue.length > 0 && setIsOpen(true)}

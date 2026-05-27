@@ -1,7 +1,7 @@
 {
   "name": "pokedex-backend",
   "version": "1.0.0",
-  "description": "Backend for Pokédex Search Engine",
+  "description": "Backend for Pokedex Search Engine",
   "main": "src/server.js",
   "type": "module",
   "scripts": {

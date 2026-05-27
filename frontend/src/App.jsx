@@ -40,10 +40,6 @@ function App() {
             className="flex items-center gap-4 shrink-0 cursor-pointer"
             onClick={() => setSelectedPokemon(null)}
           >
-            <div className="w-12 h-12 bg-surface border border-primary/50 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(0,240,255,0.4)] relative overflow-hidden group">
-              <div className="absolute inset-0 bg-primary/20 group-hover:bg-primary/40 transition-colors" />
-              <Sparkles className="text-primary w-6 h-6 relative z-10 animate-pulse-glow" />
-            </div>
             <div>
             </div>
           </motion.div>
@@ -56,15 +52,6 @@ function App() {
             <SearchBar onSelect={handleSelectPokemon} />
           </motion.div>
 
-          <motion.div 
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="hidden md:flex items-center gap-4 shrink-0"
-          >
-            <button className="p-3 bg-surface-light rounded-xl border border-white/10 hover:border-primary/50 hover:shadow-[0_0_15px_rgba(0,240,255,0.3)] transition-all">
-              <Settings className="w-5 h-5 text-text-muted hover:text-primary transition-colors" />
-            </button>
-          </motion.div>
         </div>
       </header>
 
@@ -75,8 +62,8 @@ function App() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-12 mt-10 text-center max-w-3xl mx-auto"
           >
-            <h3 className="text-xs text-primary font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 mb-6 drop-shadow-md">
-              <History className="w-4 h-4" /> System Registry Log
+            <h3 className="text-xs text-green-500 font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 mb-6 drop-shadow-md">
+              <History className="w-4 h-4" /> <span className="text-green-500">Previous Searches</span>
             </h3>
             <div className="flex flex-wrap justify-center gap-4">
               {history.map(name => (

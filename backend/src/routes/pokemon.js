@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllPokemon, getPokemonDetails, getEvolutionChain } from '../services/pokeapi.js';
+import { getAllPokemon, getPokemonDetails } from '../services/pokeapi.js';
 
 const router = express.Router();
 
@@ -34,20 +34,6 @@ router.get('/pokemon/:name', async (req, res, next) => {
     } else {
       next(error);
     }
-  }
-});
-
-// GET /api/evolution?url=...
-router.get('/evolution', async (req, res, next) => {
-  try {
-    const { url } = req.query;
-    if (!url) {
-      return res.status(400).json({ error: 'Evolution chain URL is required' });
-    }
-    const data = await getEvolutionChain(url);
-    res.json(data);
-  } catch (error) {
-    next(error);
   }
 });
 

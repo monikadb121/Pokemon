@@ -14,9 +14,3 @@ export const getPokemon = async (name) => {
   const { data } = await api.get(`/pokemon/${name}`);
   return data;
 };
-
-export const getEvolution = async (url) => {
-  if (!url) return null;
-  const { data } = await api.get(`/evolution?url=${encodeURIComponent(url)}`);
-  return data;
-};
