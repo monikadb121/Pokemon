@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;600;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-text font-sans antialiased overflow-x-hidden min-h-screen selection:bg-primary/30 selection:text-white;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-surface/40 backdrop-blur-3xl border border-white/5 shadow-2xl;
+  }
+  
+  .glass-panel-heavy {
+    @apply bg-surface-light/80 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)];
+  }
+
+  .glass-panel-hover {
+    @apply hover:bg-surface/60 hover:border-white/20 transition-all duration-300;
+  }
+  
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+  }
+  
+  .type-badge {
+    @apply px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),_0_2px_10px_rgba(0,0,0,0.3)] backdrop-blur-md;
+  }
+
+  /* Specific hologram pedestal effect */
+  .hologram-pedestal {
+    background: radial-gradient(ellipse at center, rgba(0, 240, 255, 0.15) 0%, transparent 70%);
+    border-bottom: 2px solid rgba(0, 240, 255, 0.3);
+    border-radius: 50%;
+    transform: perspective(400px) rotateX(70deg);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; 
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1); 
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 240, 255, 0.5); 
+}
