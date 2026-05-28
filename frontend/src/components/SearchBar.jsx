@@ -4,7 +4,7 @@ import { useDebounceValue } from "usehooks-ts";
 import { Search, Loader2 } from "lucide-react";
 import { searchPokemon } from "../api";
 
-export default function SearchBar({ onSelect }) {
+const SearchBar = ({ onSelect }) => {
   const [inputValue, setInputValue] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
@@ -70,4 +70,6 @@ export default function SearchBar({ onSelect }) {
       )}
     </div>
   );
-}
+};
+
+export default SearchBar;

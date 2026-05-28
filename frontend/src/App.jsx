@@ -3,7 +3,7 @@ import { Sparkles, History, Settings } from "lucide-react";
 import SearchBar from "./components/SearchBar";
 import PokemonDetails from "./components/PokemonDetails";
 
-function App() {
+const App = () => {
   const [selectedPokemon, setSelectedPokemon] = useState(null);
   const [history, setHistory] = useState([]);
 
@@ -25,12 +25,6 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background text-text relative overflow-x-hidden">
-      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-primary/20 blur-[150px] animate-blob" />
-        <div className="absolute top-[20%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-accent/20 blur-[150px] animate-blob" />
-        <div className="absolute bottom-[-20%] left-[20%] w-[60vw] h-[60vw] rounded-full bg-blue-600/10 blur-[150px] animate-blob" />
-      </div>
-
       <header className="fixed top-0 left-0 w-full z-50 px-4 md:px-8 py-4">
         <div className="max-w-7xl mx-auto glass-panel rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <div
@@ -50,7 +44,7 @@ function App() {
         {history.length > 0 && !selectedPokemon && (
           <div className="mb-12 mt-10 text-center max-w-3xl mx-auto">
             <h3 className="text-xs text-green-500 font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 mb-6 drop-shadow-md">
-              <History className="w-4 h-4" />{" "}
+              <History className="w-4 h-4" />
               <span className="text-green-500">Previous Searches</span>
             </h3>
             <div className="flex flex-wrap justify-center gap-4">
@@ -76,6 +70,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
 export default App;

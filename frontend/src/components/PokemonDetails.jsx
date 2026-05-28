@@ -4,7 +4,7 @@ import Tilt from "react-parallax-tilt";
 import { getPokemon } from "../api";
 import { getTypeColor, formatId } from "../utils/helpers";
 
-export default function PokemonDetails({ pokemonName, onSelectPokemon }) {
+const PokemonDetails = ({ pokemonName, onSelectPokemon }) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["pokemon", pokemonName],
     queryFn: () => getPokemon(pokemonName),
@@ -100,14 +100,12 @@ export default function PokemonDetails({ pokemonName, onSelectPokemon }) {
         </div>
       </div>
 
-      {/* Content Grid */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-        {/* Stats */}
         <div className="lg:col-span-7 rounded-3xl border border-white/10 bg-surface p-6">
           <h2 className="mb-6 text-xl font-semibold text-white">Stats</h2>
 
           <div className="space-y-5">
-            {data.stats.map((stat, index) => (
+            {data.stats.map((stat) => (
               <div key={stat.name}>
                 <div className="mb-2 flex items-center justify-between">
                   <span className="text-sm capitalize text-text-muted">
@@ -127,17 +125,12 @@ export default function PokemonDetails({ pokemonName, onSelectPokemon }) {
           </div>
         </div>
 
-        {/* Side Info */}
         <div className="space-y-6 lg:col-span-5">
-          {/* Basic Info */}
           <div className="rounded-3xl border border-white/10 bg-surface p-6">
             <h2 className="mb-6 text-xl font-semibold text-white">Details</h2>
-
             <div className="grid grid-cols-2 gap-4">
               <InfoCard label="Height" value={`${data.height / 10} m`} />
-
               <InfoCard label="Weight" value={`${data.weight / 10} kg`} />
-
               <div className="col-span-2">
                 <InfoCard
                   label="Base Experience"
@@ -146,11 +139,8 @@ export default function PokemonDetails({ pokemonName, onSelectPokemon }) {
               </div>
             </div>
           </div>
-
-          {/* Abilities */}
           <div className="rounded-3xl border border-white/10 bg-surface p-6">
             <h2 className="mb-6 text-xl font-semibold text-white">Abilities</h2>
-
             <div className="space-y-3">
               {data.abilities?.length ? (
                 data.abilities.map((ability) => (
@@ -161,7 +151,6 @@ export default function PokemonDetails({ pokemonName, onSelectPokemon }) {
                     <span className="capitalize text-text">
                       {ability.name.replace("-", " ")}
                     </span>
-
                     {ability.is_hidden && (
                       <span className="rounded-md bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
                         Hidden
@@ -178,14 +167,15 @@ export default function PokemonDetails({ pokemonName, onSelectPokemon }) {
       </div>
     </div>
   );
-}
+};
 
-function InfoCard({ label, value }) {
+const InfoCard = ({ label, value }) => {
   return (
     <div className="rounded-2xl border border-white/5 bg-surface-light p-5">
       <p className="text-sm text-text-muted">{label}</p>
-
       <p className="mt-2 text-2xl font-bold text-white">{value}</p>
     </div>
   );
-}
+};
+
+export default PokemonDetails;

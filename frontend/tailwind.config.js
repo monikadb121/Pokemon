@@ -6,7 +6,6 @@ export default {
     extend: {
       colors: {
         primary: "#00F0FF", // Neon Cyan
-        accent: "#FF0055", // Hot Pink
         background: "#070B14", // Deep Space Slate
         surface: "rgba(15, 23, 42, 0.6)",
         "surface-light": "rgba(30, 41, 59, 0.7)",
