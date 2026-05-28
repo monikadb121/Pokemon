@@ -1,6 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import Tilt from "react-parallax-tilt";
-
 import { getPokemon } from "../api";
 import { getTypeColor, formatId } from "../utils/helpers";
 

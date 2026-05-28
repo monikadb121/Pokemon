@@ -7,7 +7,6 @@ import { searchPokemon } from "../api";
 const SearchBar = ({ onSelect }) => {
   const [inputValue, setInputValue] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-
   const [debouncedValue] = useDebounceValue(inputValue, 400);
 
   const { data: results = [], isLoading } = useQuery({

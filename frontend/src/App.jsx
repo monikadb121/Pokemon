@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Sparkles, History, Settings } from "lucide-react";
+import { History } from "lucide-react";
 import SearchBar from "./components/SearchBar";
 import PokemonDetails from "./components/PokemonDetails";
 
@@ -27,13 +27,6 @@ const App = () => {
     <div className="min-h-screen bg-background text-text relative overflow-x-hidden">
       <header className="fixed top-0 left-0 w-full z-50 px-4 md:px-8 py-4">
         <div className="max-w-7xl mx-auto glass-panel rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div
-            className="flex items-center gap-4 shrink-0 cursor-pointer"
-            onClick={() => setSelectedPokemon(null)}
-          >
-            <div></div>
-          </div>
-
           <div className="w-full md:w-auto flex-1 max-w-2xl">
             <SearchBar onSelect={handleSelectPokemon} />
           </div>
